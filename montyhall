@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+import sys
+import random
+from array import *
+
+def dealTester():
+
+	if (len(sys.argv) == 1):
+		return print("Monty Hall Problem Simulator\nUsage: monty num_tests")
+	elif (len(sys.argv) > 2):
+		return print("Too many arguments supplied, expected usage: monty num_tests") 
+	else:
+		try:
+			numTests = int(sys.argv[1])
+		except ValueError:
+			return print("Number of Tests is not a number.")
+
+	iterator = 0
+	switchNum = 0
+	stayNum = 0
+
+	while iterator < numTests:
+
+		resultStr = letsMakeADeal()
+
+		if resultStr == "Switch":
+			switchNum += 1
+		else:
+			stayNum += 1
+
+		iterator += 1
+
+	switchProportion = float(switchNum / numTests) * 100
+	stayProportion = (100 - switchProportion)
+
+	print("Switch would win %.2f percent of experiments.\nStay would win %.2f percent of experiments."%(switchProportion, stayProportion))
+
+def letsMakeADeal():
+	doorConfigChoiceNum = random.randint(0, 2)
+
+	if doorConfigChoiceNum == 0:
+		doorConfig = ["G", "G", "C"]
+	elif doorConfigChoiceNum == 1:
+		doorConfig = ["G", "C", "G"]
+	else:
+		doorConfig = ["C", "G", "G"] 
+
+	initialUserChoiceNum = random.randint(0, 2)
+	initialUserChoiceStr = doorConfig[initialUserChoiceNum]
+	doorConfig.pop(initialUserChoiceNum)
+
+	doorConfig.remove("G")
+
+	if initialUserChoiceStr == "C":
+		return "Stay"
+	else:
+		return "Switch"
+
+dealTester()
+
+sys.exit(0)
